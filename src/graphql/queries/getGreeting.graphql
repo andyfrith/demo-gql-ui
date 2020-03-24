@@ -1,0 +1,8 @@
+query GetGreeting($input: getGreetingRequest!) {
+  getGreeting(input: $input) {
+    greeting {
+      id
+      message
+    }
+  }
+}
