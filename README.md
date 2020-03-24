@@ -1,1 +1,1 @@
-# demo-ui
+# demo-gql-ui
