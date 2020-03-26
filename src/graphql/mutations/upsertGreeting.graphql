@@ -1,6 +1,0 @@
-mutation UsertGreeting($input: UpsertGreetingInput!) {
-  upsertGreeting(input: $input) {
-    id
-    message
-  }
-}

@@ -16,6 +16,19 @@ export type _Service = {
   sdl?: Maybe<Scalars['String']>;
 };
 
+export type CreateGreetingInput = {
+  id: Scalars['ID'];
+  message: Scalars['String'];
+  greeter: Scalars['String'];
+};
+
+export type CreateGreetingOutput = {
+   __typename?: 'CreateGreetingOutput';
+  id: Scalars['ID'];
+  message: Scalars['String'];
+  greeter: Scalars['String'];
+};
+
 export type GetGreetingRequest = {
   id: Scalars['ID'];
 };
@@ -29,22 +42,24 @@ export type Greeting = {
    __typename?: 'Greeting';
   id?: Maybe<Scalars['ID']>;
   message?: Maybe<Scalars['String']>;
+  greeter?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
    __typename?: 'Mutation';
-  upsertGreeting: UpsertGreetingOutput;
+  createGreeting: CreateGreetingOutput;
 };
 
 
-export type MutationUpsertGreetingArgs = {
-  input: UpsertGreetingInput;
+export type MutationCreateGreetingArgs = {
+  input: CreateGreetingInput;
 };
 
 export type Query = {
    __typename?: 'Query';
   _service: _Service;
   getGreeting: GetGreetingResponse;
+  greetings?: Maybe<Array<Maybe<Greeting>>>;
 };
 
 
@@ -52,27 +67,16 @@ export type QueryGetGreetingArgs = {
   input: GetGreetingRequest;
 };
 
-export type UpsertGreetingInput = {
-  id: Scalars['ID'];
-  message: Scalars['String'];
-};
-
-export type UpsertGreetingOutput = {
-   __typename?: 'UpsertGreetingOutput';
-  id: Scalars['ID'];
-  message: Scalars['String'];
-};
-
-export type UsertGreetingMutationVariables = {
-  input: UpsertGreetingInput;
+export type CreateGreetingMutationVariables = {
+  input: CreateGreetingInput;
 };
 
 
-export type UsertGreetingMutation = (
+export type CreateGreetingMutation = (
   { __typename?: 'Mutation' }
-  & { upsertGreeting: (
-    { __typename?: 'UpsertGreetingOutput' }
-    & Pick<UpsertGreetingOutput, 'id' | 'message'>
+  & { createGreeting: (
+    { __typename?: 'CreateGreetingOutput' }
+    & Pick<CreateGreetingOutput, 'greeter' | 'id' | 'message'>
   ) }
 );
 
@@ -87,15 +91,27 @@ export type GetGreetingQuery = (
     { __typename?: 'getGreetingResponse' }
     & { greeting?: Maybe<(
       { __typename?: 'Greeting' }
-      & Pick<Greeting, 'id' | 'message'>
+      & Pick<Greeting, 'greeter' | 'id' | 'message'>
     )> }
   ) }
 );
 
+export type ListGreetingsQueryVariables = {};
 
-export const UsertGreetingDocument = gql`
-    mutation UsertGreeting($input: UpsertGreetingInput!) {
-  upsertGreeting(input: $input) {
+
+export type ListGreetingsQuery = (
+  { __typename?: 'Query' }
+  & { greetings?: Maybe<Array<Maybe<(
+    { __typename?: 'Greeting' }
+    & Pick<Greeting, 'greeter' | 'id' | 'message'>
+  )>>> }
+);
+
+
+export const CreateGreetingDocument = gql`
+    mutation CreateGreeting($input: CreateGreetingInput!) {
+  createGreeting(input: $input) {
+    greeter
     id
     message
   }
@@ -105,9 +121,19 @@ export const GetGreetingDocument = gql`
     query GetGreeting($input: getGreetingRequest!) {
   getGreeting(input: $input) {
     greeting {
+      greeter
       id
       message
     }
+  }
+}
+    `;
+export const ListGreetingsDocument = gql`
+    query listGreetings {
+  greetings {
+    greeter
+    id
+    message
   }
 }
     `;
@@ -118,11 +144,14 @@ export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    UsertGreeting(variables: UsertGreetingMutationVariables): Promise<UsertGreetingMutation> {
-      return withWrapper(() => client.request<UsertGreetingMutation>(print(UsertGreetingDocument), variables));
+    CreateGreeting(variables: CreateGreetingMutationVariables): Promise<CreateGreetingMutation> {
+      return withWrapper(() => client.request<CreateGreetingMutation>(print(CreateGreetingDocument), variables));
     },
     GetGreeting(variables: GetGreetingQueryVariables): Promise<GetGreetingQuery> {
       return withWrapper(() => client.request<GetGreetingQuery>(print(GetGreetingDocument), variables));
+    },
+    listGreetings(variables?: ListGreetingsQueryVariables): Promise<ListGreetingsQuery> {
+      return withWrapper(() => client.request<ListGreetingsQuery>(print(ListGreetingsDocument), variables));
     }
   };
 }
