@@ -17,7 +17,7 @@ This very light application serves as simple demo of several technologies and be
 
 ## Features
 
-(https://github.com/andyfrith/demo-gql-ui/blob/master/greetings.png)
+<img src="https://github.com/andyfrith/demo-gql-ui/blob/master/greetings.png" alt="Greetings" />
 
 A list of all greetings in the database is diplayed when opening [http://localhost:3000/](http://localhost:3000/) in the browser.
 
